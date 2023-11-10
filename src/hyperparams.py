@@ -1,14 +1,13 @@
 import torch
 
 # Hyperparameters etc.
-LOCAL = True
+LOCAL = False
 NOTEBOOK = False
 LEARNING_RATE = 1e-4
-# DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-DEVICE = 'cpu'
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 1
-NUM_EPOCHS = 2
-NUM_WORKERS = 0
+NUM_EPOCHS = 10
+NUM_WORKERS = 2
 PIN_MEMORY = True
 LOAD_MODEL = False
 TEST_MODEL=False
@@ -27,3 +26,4 @@ if LOCAL:
     DATASET_DIR = "./input"
 else:
     DATASET_DIR="/kaggle/input/carvana-image-masking-png"
+    
