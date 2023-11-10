@@ -47,11 +47,11 @@ class Trainer:
             train_loader = dataset.train_loader
             val_loader = dataset.val_loader
         else:
-            from src.data.prepare_datasets import DatasetPreparer
-            datasetPreparer = DatasetPreparer()
-            datasetPreparer.prepare_training_dataloaders()
-            train_loader, val_loader = datasetPreparer.dataloader_training, datasetPreparer.dataloader_validation
-
+            from src.data.loaders import LungImageLoaders
+            dataset = LungImageLoaders()
+            train_loader = dataset.train_loader
+            val_loader = dataset.val_loader
+ 
         model = UNET(in_channels=3, out_channels=1).to(h.DEVICE)
         loss_fn = nn.BCEWithLogitsLoss()
         optimizer = optim.Adam(model.parameters(), lr=h.LEARNING_RATE)

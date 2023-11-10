@@ -6,14 +6,23 @@ from torchvision.io import read_image, ImageReadMode
 from torchvision.utils import save_image
 from torchvision.transforms import v2
 import src.data.constants as c
+import src.hyperparams as h
 
 def format_image_tensor(image):
   return image.unsqueeze(0).permute(0, 1, 2, 3)/255
 
 class DataPreparer():
+    TEST_FILES = 0
+    NUM_FILES = 0
+
     def __init__(self):
-        pass
-    
+        if (h.LOCAL):
+            self.TEST_FILES = 2
+            self.NUM_FILES = 5
+        else:
+            self.TEST_FILES = 10
+            self.NUM_FILES = 1000
+
     def prepare_data(self):
        self.reset_data()
        # print('data reset')
@@ -23,18 +32,22 @@ class DataPreparer():
        print('shenzhen data prepared')
 
     def reset_data(self):
-        for dir in [c.SEGMENTATION_DIR, c.SEGMENTATION_TRAIN_DIR, c.SEGMENTATION_TEST_DIR, c.SEGMENTATION_IMAGE_DIR, c.SEGMENTATION_MASK_DIR]:
+        for dir in [c.SEGMENTATION_TRAIN_DIR, c.SEGMENTATION_TEST_DIR, c.SEGMENTATION_IMAGE_DIR, c.SEGMENTATION_MASK_DIR]:
             if os.path.exists(dir):
-                shutil.rmtree(dir)
+                pass
+                # shutil.rmtree(dir)
             else:
                 os.mkdir(dir)
 
     def prepare_montgomery_data(self):
       montgomery_left_mask_dir = glob(os.path.join(c.MONTGOMERY_LEFT_MASK_DIR, '*.png'))
-      montgomery_test = montgomery_left_mask_dir[:10]
-      montgomery_train= montgomery_left_mask_dir[10:]
+      montgomery_test = montgomery_left_mask_dir[:self.TEST_FILES]
+      montgomery_train= montgomery_left_mask_dir[self.TEST_FILES:]
+    
+      if h.LOCAL:
+          montgomery_left_mask_dir = montgomery_left_mask_dir[:self.NUM_FILES]
 
-      for left_image_file in montgomery_left_mask_dir[:100]:
+      for left_image_file in montgomery_left_mask_dir:
           base_file = os.path.basename(left_image_file)
           image_file = os.path.join(c.MONTGOMERY_IMAGE_DIR, base_file)
           right_image_file = os.path.join(c.MONTGOMERY_RIGHT_MASK_DIR, base_file)
@@ -62,10 +75,13 @@ class DataPreparer():
         
     def prepare_shenzhen_data(self):
       shenzhen_mask_dir = glob(os.path.join(c.SHENZHEN_MASK_DIR, '*.png'))
-      shenzhen_test = shenzhen_mask_dir[:10]
-      shenzhen_train= shenzhen_mask_dir[10:]
+      shenzhen_test = shenzhen_mask_dir[:self.TEST_FILES]
+      shenzhen_train= shenzhen_mask_dir[self.TEST_FILES:]
 
-      for mask_file in shenzhen_mask_dir[:100]:
+      if h.LOCAL:
+          shenzhen_mask_dir = shenzhen_mask_dir[:self.NUM_FILES]
+
+      for mask_file in shenzhen_mask_dir:
           base_file = os.path.basename(mask_file).replace("_mask", "")
           image_file = os.path.join(c.SHENZHEN_IMAGE_DIR, base_file)
 
