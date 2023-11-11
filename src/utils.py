@@ -2,6 +2,7 @@
 import torch
 from torch.utils.data import DataLoader
 import torchvision
+from torchmetrics.classification import Dice
 
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
     print("=> Saving checkpoint")
@@ -42,9 +43,11 @@ def get_loaders(
 def check_accuracy(loader, model, device="cuda"):
     num_correct = 0
     num_pixels = 0
-    dice_score = 0
+    running_manual_dice_score = 0
+    running_tm_dice_score = 0
+    loader_len = len(loader)
     model.eval()
-
+    dice = Dice()
     with torch.no_grad():
         for x, y in loader:
             x = x.to(device)
@@ -55,16 +58,48 @@ def check_accuracy(loader, model, device="cuda"):
             preds = (preds > 0.5).float()
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
-            dice_score += (2 * (preds * y).sum()) / (
-                (preds + y).sum() + 1e-8
-            )
+            indiv_dice_score = dice_coefficient(preds, y)
+            running_manual_dice_score += indiv_dice_score
+            target = (y == 1)
+            print('manual:', indiv_dice_score)
+            tm_dice = dice(preds, target)
+            running_tm_dice_score += tm_dice
+            print('tm:', tm_dice)
+
+    average_manual_dice_score = (running_manual_dice_score / loader_len)
+    average_tm_dice_score = (running_tm_dice_score / loader_len)
 
     print(
         f"Got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}"
     )
-    print(f"Dice score: {dice_score/len(loader)}")
+    print(f"Manual Dice score: {average_manual_dice_score}")
+    print(f"TM Dice score: {average_tm_dice_score}")
     model.train()
-    return dice_score
+    return average_tm_dice_score
+
+def dice_coefficient(pred, target, epsilon=1e-6):
+    """
+    Compute the Dice coefficient.
+
+    :param pred: Tensor of predicted segmentation.
+    :param target: Tensor of ground truth segmentation.
+    :param epsilon: Small value to avoid division by zero.
+    :return: Dice coefficient.
+    """
+
+    # Flatten the tensors to ensure it works for various input shapes
+    pred_flat = pred.view(-1)
+    target_flat = target.view(-1)
+
+    # Compute intersection and union
+    intersection = (pred_flat * target_flat).sum()
+    union = pred_flat.sum() + target_flat.sum()
+
+    # Compute Dice coefficient
+    dice = (2. * intersection + epsilon) / (union + epsilon)
+
+    return dice
+
 
 def save_predictions_as_imgs(
     loader, model, folder="saved_images/", device="cuda"
