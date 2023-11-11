@@ -1,7 +1,7 @@
 import torch
 
 # Hyperparameters etc.
-LOCAL = False
+LOCAL = True
 NOTEBOOK = False
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -13,8 +13,6 @@ else:
   NUM_EPOCHS = 10
   NUM_WORKERS = 2
 PIN_MEMORY = True
-LOAD_MODEL = False
-TEST_MODEL=False
 DATASET = 'lung'
 LOADERS = None
 if DATASET == 'carvana':

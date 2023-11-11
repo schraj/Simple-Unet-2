@@ -45,11 +45,11 @@ class Trainer:
     def test(self):
         self.modelLifecyle.load_model()
         dataset = LungImageLoaders()
-        val_loader = dataset.val_loader
+        test_loader = dataset.test_loader
 
-        check_accuracy(val_loader, self.model, device=h.DEVICE)
+        check_accuracy(test_loader, self.model, device=h.DEVICE)
         save_predictions_as_imgs(
-            val_loader, self.model, folder="saved_images", device=h.DEVICE
+            test_loader, self.model, folder="saved_images", device=h.DEVICE
         )
 
     def train(self):
@@ -75,7 +75,6 @@ class Trainer:
             print("Epoch ",epoch)
             self.train_fn(train_loader, optimizer, loss_fn, scaler)
 
-            # check accuracy
             current_score = check_accuracy(val_loader, self.model, device=h.DEVICE)
             
             if current_score > best_score:
@@ -84,6 +83,6 @@ class Trainer:
                     val_loader, self.model, folder="saved_images", device=h.DEVICE
                 )
             
-            if epoch % 5 == 0:
+            if epoch % 10 == 0:
                 self.modelLifecyle.save_model()
                 print("Model saved")

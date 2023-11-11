@@ -16,6 +16,7 @@ random_seed = 42
 class LungImageLoaders:
     train_loader: None
     val_loader: None
+    test_loader: None
     def __init__(self):
       IMAGE_HEIGHT = 512  # 1280 originally
       IMAGE_WIDTH = 512  # 1918 originally
@@ -33,9 +34,21 @@ class LungImageLoaders:
             ),
             ToTensorV2(),
         ],
-    )
+      )
 
       self.val_transforms = A.Compose(
+        [
+            A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+            A.Normalize(
+                mean=[0.0, 0.0, 0.0],
+                std=[1.0, 1.0, 1.0],
+                max_pixel_value=255.0,
+            ),
+            ToTensorV2(),
+        ],
+      )
+
+      self.test_transforms = A.Compose(
         [
             A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
             A.Normalize(
@@ -65,9 +78,18 @@ class LungImageLoaders:
           inputs=self.inputs_valid, targets=self.targets_valid, transform=self.val_transforms
       )
     
-      self.train_loader, self.val_loader = get_loaders(
+      self.test_files = get_file_list(c.SEGMENTATION_TEST_DIR)
+      test_targets = [s for s in self.test_files if 'mask' in s]
+      test_inputs =  [s for s in self.test_files if 'mask' not in s]
+
+      self.dataset_test = SegmentationDataSet(
+          inputs=test_inputs, targets=test_targets, transform=self.test_transforms
+      )
+
+      self.train_loader, self.val_loader, self.test_loader = get_loaders(
           self.dataset_train,
           self.dataset_valid,
+          self.dataset_test,
           h.BATCH_SIZE,
           h.NUM_WORKERS,
           h.PIN_MEMORY,
