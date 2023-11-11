@@ -83,7 +83,7 @@ def check_accuracy(loader, model, device="cuda"):
     # print(f"Manual Dice score: {average_manual_dice_score}")
     print(f"TM Dice score: {average_tm_dice_score}")
     model.train()
-    return preds_array
+    return average_tm_dice_score, preds_array
 
 # This is not correct, giving values above 1
 def dice_coefficient(pred, target, epsilon=1e-6):

@@ -23,7 +23,8 @@ class Processor:
         print(len(train_files), len(test_files), len(mask_files))
 
         trainer = Trainer()
-        trainer.train()
+        score_array = trainer.train()
+        return score_array
     def run_test(self, include_visualization):
         trainer = Trainer()
         preds_array = trainer.test(include_visualization)
