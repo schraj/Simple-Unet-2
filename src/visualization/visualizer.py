@@ -32,7 +32,7 @@ class Visualizer:
       merged_image = add_mask(image, mask_image)
       merged_prediction = add_mask(image, preds)
 
-      _, axs = plt.subplots(2, 3, figsize=(20, 20))
+      _, axs = plt.subplots(2, 3, figsize=(15, 8))
 
       axs[0, 0].set_title("Target")
       axs[0, 0].imshow(mask_image)
