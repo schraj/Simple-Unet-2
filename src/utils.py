@@ -102,7 +102,7 @@ def dice_coefficient(pred, target, epsilon=1e-6):
     return dice
 
 def save_predictions_as_imgs(
-    loader, model, folder="saved_images/", device="cuda"
+    loader, model, folder="saved_images", device="cuda"
 ):
     model.eval()
     count = 3
@@ -115,7 +115,7 @@ def save_predictions_as_imgs(
             torchvision.utils.save_image(
                 preds, f"{folder}/pred_{idx}.png"
             )
-            torchvision.utils.save_image(y.unsqueeze(1), f"{folder}{idx}.png")
+            torchvision.utils.save_image(y.unsqueeze(1), f"{folder}/{idx}.png")
         else:
             break
         count -= 1
