@@ -12,6 +12,6 @@ if LOCAL:
   NUM_WORKERS = 0
   PIN_MEMORY = True
 else: 
-  NUM_EPOCHS = 2
+  NUM_EPOCHS = 30
   NUM_WORKERS = 2
   PIN_MEMORY = True    
