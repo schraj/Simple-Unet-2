@@ -52,7 +52,7 @@ class Trainer:
 
         if (include_visualization):
             visualizer = Visualizer(lung_image_loader, self.model)
-            visualizer.show_test_results(50, preds_array)
+            visualizer.show_test_results(15, preds_array)
 
         return preds_array
 
