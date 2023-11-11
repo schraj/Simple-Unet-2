@@ -17,15 +17,19 @@ class Visualizer:
     self.model.eval()
     count = min(count, len(self.lung_image_loader.test_loader))
     ctr = 0
-    for image_file, mask_image_file in zip(self.lung_image_loader.test_inputs, self.lung_image_loader.test_targets):
+    for image_file in self.lung_image_loader.test_inputs:
+      mask_image_file = image_file[:-4] + '_mask.png'  
       preds = preds_array[ctr]
+      preds = preds.cpu()
+      preds = torch.squeeze(preds)
+      preds_image = preds
+
       image = imread(image_file)
       mask_image = imread(mask_image_file, as_gray=True)
+
       image, mask_image= torch.from_numpy(image), torch.from_numpy(mask_image)
       image = image.permute(2, 0, 1)
       merged_image = add_mask(image, mask_image)
-      preds = torch.squeeze(preds)
-      preds_image = (preds > 0.5).float()
       merged_prediction = add_mask(image, preds)
 
       _, axs = plt.subplots(2, 2, figsize=(20, 20))
