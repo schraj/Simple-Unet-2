@@ -26,3 +26,15 @@ The most commonly used loss functions with U-Net models for image segmentation i
 - Jaccard/Intersection-Over-Union (IoU) Loss:
  - Similar to Dice loss, it measures the overlap between predicted and ground truth segments.
  - Often used in conjunction with other loss functions.
+
+ ### Evaluation of model
+
+A "good" Dice Score (also known as the Dice Coefficient or Sørensen–Dice index) for medical image segmentation can vary depending on the specific application, the complexity of the anatomical structures being segmented, and the quality of the imaging data. However, here are some general guidelines:
+
+- Score Range: The Dice Score ranges from 0 to 1, where 0 indicates no overlap and 1 indicates perfect overlap between the predicted segmentation and the ground truth.
+- General Benchmark:
+ - A Dice Score above 0.7 is often considered acceptable in many medical image segmentation tasks.
+ - Scores above 0.8 or 0.9 are usually regarded as good to excellent.
+-Depends on Application:
+ - For certain critical applications, like tumor segmentation in oncology or lesion segmentation in neurological disorders, higher accuracy (thus higher Dice Scores) is often required due to the clinical implications.
+ - For less critical applications, a slightly lower score might be acceptable.
