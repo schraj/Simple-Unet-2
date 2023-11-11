@@ -26,5 +26,5 @@ class Processor:
         trainer.train()
     def run_test(self, include_visualization):
         trainer = Trainer()
-        trainer.test(include_visualization)
-
+        preds_array = trainer.test(include_visualization)
+        return preds_array
