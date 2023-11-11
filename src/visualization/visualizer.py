@@ -40,7 +40,7 @@ class Visualizer:
         break
 
   @staticmethod
-  def show_sample_montgomery_image(self):  
+  def show_sample_montgomery_image():  
     base_file = get_file_name(c.SEGMENTATION_IMAGE_DIR, 'M')
     image_file = os.path.join(c.SEGMENTATION_IMAGE_DIR, base_file)
     mask_image_file = os.path.join(c.SEGMENTATION_MASK_DIR, base_file)
@@ -83,7 +83,7 @@ class Visualizer:
     axs[1, 2].imshow(merged_image.permute(1, 2, 0))
 
   @staticmethod
-  def show_sample_shenszhen_image(self):
+  def show_sample_shenszhen_image():
     base_file = get_file_name(c.SEGMENTATION_IMAGE_DIR, 'C')
 
     image_file = os.path.join(c.SEGMENTATION_IMAGE_DIR, base_file)
