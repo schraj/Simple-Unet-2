@@ -1,9 +1,6 @@
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from src.carvana_data.dataset import generate_train_test_dataset
+from src.carvana.dataset import generate_train_test_dataset
 from src.model_api.utils import get_loaders
 import src.config as h
 
@@ -41,7 +38,12 @@ class CarvanaLoaders:
         ],
       )
 
-      train_ds,test_ds = generate_train_test_dataset(h.DATASET_DIR,self.train_transform,self.val_transforms,count=1)
+      if h.LOCAL:
+          DATASET_DIR = "./carvana_images"
+      else:
+          DATASET_DIR="/kaggle/input/carvana-image-masking-png"
+
+      train_ds,test_ds = generate_train_test_dataset(DATASET_DIR,self.train_transform,self.val_transforms,count=1)
     
       self.train_loader, self.val_loader = get_loaders(
           train_ds,
