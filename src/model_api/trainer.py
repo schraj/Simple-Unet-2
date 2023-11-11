@@ -79,13 +79,13 @@ class Trainer:
             print("Epoch ",epoch)
             self.train_fn(train_loader, optimizer, loss_fn, scaler)
 
-            current_score = check_accuracy(val_loader, self.model, device=h.DEVICE)
+            check_accuracy(val_loader, self.model, device=h.DEVICE)
             
-            if current_score > best_score:
-                best_score = current_score 
-                save_predictions_as_imgs(
-                    val_loader, self.model, folder="saved_images", device=h.DEVICE
-                )
+            # if current_score > best_score:
+            #     best_score = current_score 
+            #     save_predictions_as_imgs(
+            #         val_loader, self.model, folder="saved_images", device=h.DEVICE
+            #     )
             
             if epoch % 10 == 0:
                 self.modelLifecyle.save_model()
