@@ -27,7 +27,7 @@ class Visualizer:
       preds = torch.squeeze(preds)
       merged_prediction = add_mask(image, preds)
 
-      _, axs = plt.subplots(2, 2, figsize=(15, 8))
+      _, axs = plt.subplots(1, 2, figsize=(20, 20))
 
       axs[0, 0].set_title("Target")
       axs[0, 0].imshow(merged_image.permute(1, 2, 0))
