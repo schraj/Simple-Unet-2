@@ -47,7 +47,7 @@ def check_accuracy(loader, model, device="cuda"):
     running_tm_dice_score = 0
     loader_len = len(loader)
     model.eval()
-    dice = Dice()
+    dice=Dice().to(device)
     with torch.no_grad():
         for x, y in loader:
             x = x.to(device)
