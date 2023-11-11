@@ -5,8 +5,8 @@ from glob import glob
 from torchvision.io import read_image, ImageReadMode
 from torchvision.utils import save_image
 from torchvision.transforms import v2
-import src.data.constants as c
-import src.hyperparams as h
+import src.lung.constants as c
+import src.config as h
 
 def format_image_tensor(image):
   return image.unsqueeze(0).permute(0, 1, 2, 3)/255

@@ -4,9 +4,9 @@ import os
 import torch
 import numpy as np
 from glob import glob
-import src.data.constants as c
-from src.data.prepare_data import DataPreparer
-from src.trainer import Trainer
+import src.lung.constants as c
+from src.lung.prepare_data import DataPreparer
+from src.model_api.trainer import Trainer
 
 class Processor:
     def __init__(self):

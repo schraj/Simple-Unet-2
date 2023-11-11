@@ -1,5 +1,5 @@
 import os
-import src.data.constants as c
+import src.lung.constants as c
 
 def get_file_list(path):
     file_list = []

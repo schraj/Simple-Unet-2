@@ -1,5 +1,5 @@
 import os
-import src.hyperparams as h
+import src.config as h
 
 if h.LOCAL:
   INPUT_DIR = os.path.join("./lung_images")

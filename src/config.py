@@ -1,7 +1,7 @@
 import torch
 
 # Hyperparameters etc.
-LOCAL = True
+LOCAL = False
 NOTEBOOK = False
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"

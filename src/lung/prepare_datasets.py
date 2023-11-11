@@ -2,10 +2,10 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from skimage.transform import resize
-import src.data.constants as c
-from src.data.data_utils import get_file_list
-from src.data.custom_datasets import SegmentationDataSet
-from src.data.transformations import (
+import src.lung.constants as c
+from src.lung.data_utils import get_file_list
+from src.lung.custom_datasets import SegmentationDataSet
+from src.lung.transformations import (
     ComposeDouble,
     FunctionWrapperDouble,
     normalize_01,

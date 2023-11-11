@@ -4,11 +4,11 @@ from sklearn.model_selection import train_test_split
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from src.utils import get_loaders
-import src.hyperparams as h
-from src.data.data_utils import get_file_list
-from src.data.custom_datasets import SegmentationDataSet
-import src.data.constants as c
+from src.model_api.utils import get_loaders
+import src.config as h
+from src.lung.data_utils import get_file_list
+from src.lung.custom_datasets import SegmentationDataSet
+import src.lung.constants as c
 
 train_size = 0.8
 random_seed = 42

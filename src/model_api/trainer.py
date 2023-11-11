@@ -5,11 +5,11 @@ from albumentations.pytorch import ToTensorV2
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from src.utils import save_predictions_as_imgs, save_checkpoint, load_checkpoint, check_accuracy
-from src.unet import UNET
-import src.hyperparams as h
-from src.data.loaders import LungImageLoaders
-from src.lifecycle import ModelLifecycle
+from src.model_api.utils import save_predictions_as_imgs, save_checkpoint, load_checkpoint, check_accuracy
+from src.model.unet import UNET
+import src.config as h
+from src.lung.loaders import LungImageLoaders
+from src.model_api.lifecycle import ModelLifecycle
 
 class Trainer:
     def __init__(self):
@@ -59,7 +59,7 @@ class Trainer:
             train_loader = dataset.train_loader
             val_loader = dataset.val_loader
         else:
-            from src.data.loaders import LungImageLoaders
+            from src.lung.loaders import LungImageLoaders
             dataset = LungImageLoaders()
             train_loader = dataset.train_loader
             val_loader = dataset.val_loader

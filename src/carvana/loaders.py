@@ -3,9 +3,9 @@ from albumentations.pytorch import ToTensorV2
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from src.dataset import generate_train_test_dataset
-from src.utils import get_loaders
-import src.hyperparams as h
+from src.carvana_data.dataset import generate_train_test_dataset
+from src.model_api.utils import get_loaders
+import src.config as h
 
 class CarvanaLoaders:
     train_loader: None
