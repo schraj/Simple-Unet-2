@@ -61,10 +61,10 @@ def check_accuracy(loader, model, device="cuda"):
             indiv_dice_score = dice_coefficient(preds, y)
             running_manual_dice_score += indiv_dice_score
             target = (y == 1)
-            print('manual:', indiv_dice_score)
+            # print('manual:', indiv_dice_score)
             tm_dice = dice(preds, target)
             running_tm_dice_score += tm_dice
-            print('tm:', tm_dice)
+            # print('tm:', tm_dice)
 
     average_manual_dice_score = (running_manual_dice_score / loader_len)
     average_tm_dice_score = (running_tm_dice_score / loader_len)
@@ -72,11 +72,12 @@ def check_accuracy(loader, model, device="cuda"):
     print(
         f"Got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}"
     )
-    print(f"Manual Dice score: {average_manual_dice_score}")
+    # print(f"Manual Dice score: {average_manual_dice_score}")
     print(f"TM Dice score: {average_tm_dice_score}")
     model.train()
     return average_tm_dice_score
 
+# This is not correct, giving values above 1
 def dice_coefficient(pred, target, epsilon=1e-6):
     """
     Compute the Dice coefficient.
