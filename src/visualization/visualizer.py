@@ -25,15 +25,22 @@ class Visualizer:
       image = image.permute(2, 0, 1)
       merged_image = add_mask(image, mask_image)
       preds = torch.squeeze(preds)
+      preds_image = (preds > 0.5).float()
       merged_prediction = add_mask(image, preds)
 
-      _, axs = plt.subplots(1, 2, figsize=(20, 20))
+      _, axs = plt.subplots(2, 2, figsize=(20, 20))
 
       axs[0, 0].set_title("Target")
-      axs[0, 0].imshow(merged_image.permute(1, 2, 0))
+      axs[0, 0].imshow(mask_image.permute(1, 2, 0))
 
       axs[0, 1].set_title("Prediction")
-      axs[0, 1].imshow(merged_prediction.permute(1, 2, 0))
+      axs[0, 1].imshow(preds_image.permute(1, 2, 0))
+
+      axs[1, 0].set_title("Target")
+      axs[1, 0].imshow(merged_image.permute(1, 2, 0))
+
+      axs[1, 1].set_title("Prediction")
+      axs[1, 1].imshow(merged_prediction.permute(1, 2, 0))
 
       ctr += 1
       if ctr == count:
