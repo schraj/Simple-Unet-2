@@ -1,15 +1,7 @@
-
-# Presentation Summary
-An overview of image segmentation using an example dataset from medical radiology.  
-Agenda:
-- implementation, which is a pytorch-based U-Net model architecture
-- tuning procedure and decisions made along the way to improve performance.
-- deployment and inference
-
 # 1. Overview
 This repository is an exercise in image segmentation using lung images as the dataset. 
 
-Medical Image Segmentation is the process of automatic detection of boundaries within images. In this exercise, I train a convolutional neural network with [U-Net](https://arxiv.org/abs/1505.04597) architecture.
+Medical Image Segmentation is the process of automatic detection of boundaries within images. In this exercise, I train a neural network with [U-Net](https://arxiv.org/abs/1505.04597) architecture.
 
 Uses: 
 - Identifying Regions of Interest: Medical image segmentation is used to distinguish and isolate specific regions or structures within medical images, such as organs, tissues, or tumors.
@@ -32,10 +24,6 @@ Inspiration for lung segmentation project was taken from this (notebook)[https:/
 U-net model was adapted from this these two projects
 
 - (blog post)[https://towardsdatascience.com/creating-and-training-a-u-net-model-with-pytorch-for-2d-3d-semantic-segmentation-model-building-6ab09d6a0862]
-
-- TODO: find second project used
-
-This project was undertaken with the goal of presenting to the Deep Learning Community associated with Deci.ai.  However, it is also a reflection of my interest in CV and building up an image segmentation task from scratch.
 
 # 1. Installation
 
@@ -65,55 +53,46 @@ TODO: get list of libraries
 1. Combine left and right lung segmentation masks of Montgomery chest x-rays
 1. Resize images to 512x512 pixels
 1. Split images into training and test datasets
-1. Write images to /segmentation directory
+1. Write images to /segmentation 
+1. Training dataset will have an 80:20 training:validation split
+1. Test dataset is 50 images that are put aside for final testing of the model
 
 # 4. Training
-1. Trainer class implements the training loop
-2. Loss Function: 
+1. Trainer class implements the training loop and the testing loops
+1. Loss Function: 
  - I'm currently using PyTorch's (BCEWithLogitsLoss)[https://pytorch.org/docs/stable/generated/torch.nn.BCEWithLogitsLoss.html]
 
  - (dice coefficient)[https://towardsdatascience.com/biomedical-image-segmentation-u-net-a787741837fa#:~:text=Dice%20coefficient,-A%20common%20metric&text=The%20calculation%20is%202%20*%20the,denotes%20perfect%20and%20complete%20overlap]
 
-3. Next step would be to use a loss function that is a weighted combination of these two.  The weight would be determined empirically.
+1. Tuning
+ - Adding augmentations had a positive effect on the final performance as measured by the Dice Score
+  - Used the `albumentations` library which was much clearer than doing by hand
+ - Training model longer(50 epochs) 
+1. Next steps
+ -  Use a loss function that is a weighted combination of these two.  The weight would be determined empirically.
 
 # 5. Test
-1. 
+1. Test dataset is 50 images that are put aside for final testing of the model
+2. Retrieve saved model, send these images through the pretrained model and compare the result with the target
 
 # 6. Deployment
+1. Save model at the end of training on kaggle
+1. Download model
+1. Create a new dataset in kaggle and upload model to it
 
 ## Kaggle
 
 1. Link github repo to kaggle and it appears in `/kaggle/working`.
-2. Add it to the path and then can use it as a custom library from your notebook
-
-## AWS
-
-(uploading data to s3)[https://medium.com/@antonysruthy11/loading-kaggle-dataset-to-aws-s3-using-boto3-50af3e015fb2]
-
-(also uploading to s3)[https://siddiqss.medium.com/how-to-extract-a-large-dataset-from-zip-file-on-aws-s3-easy-way-dc5aefb0257]
-
-# Performance
-- Tuning: 
- - First model's dice score never rose above .7 and in fact decreased with the number of epochs
- - Adding albumentations
- - Getting dice score > 1
-
-
-
-Without albumentations:
-Results
-Epic 1: Dice=.80, Acc=70
-
-With albumentations
-Results
-Epic 1: Dice=~.90, Acc=78.32
-
+  - This was key if you don't want to only use a notebook, but want to write python modules
+  - See notebook for keys to making this work
+1. Add it to the path and then can use it as a custom library from your notebook
 
 # Finally. Learning
-1. The data/image manipulation had a higher learning curve than expected.  Mixing image libraries led to unexpected formatting and some learning.
-1. Best way to train/deploy model with large dataset
+1. The data/image manipulation had a higher learning curve than expected.  Mixing image libraries led to unexpected formatting.
+1. Interactions between Kaggle and Github
+ - Key is that you can clone a github repo into your kaggle working directory and then add the path to your python modules into the notebook environment's path. 
 1. Interactions between jupyter notebook and code modules
--- Auto reload of changes within your modules can be enabled with this
+ - Auto reload of changes within your modules can be enabled with this
 
 [Reference](https://bobbyhadz.com/blog/jupyter-notebook-reload-module#:~:text=Use%20the%20%25load_ext%20autoreload%20magic,before%20executing%20the%20Python%20code.)
 ```
@@ -121,3 +100,7 @@ Epic 1: Dice=~.90, Acc=78.32
 %autoreload 2
 
 ```
+1. With this interaction between kaggle and github setup, it is good to instrument your code to easily toggle between your local dev environment and the kaggle environment.  The process is:
+ - Do development locally
+ - upload to github
+ - pull your updates into your kaggle notebook
