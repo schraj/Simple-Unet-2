@@ -54,6 +54,8 @@ class Trainer:
             visualizer = Visualizer(lung_image_loader, self.model)
             visualizer.show_test_results(5, preds_array)
 
+        return preds_array
+
     def train(self):
         if (h.DATASET == 'carvana'):
             from src.carvana.loaders import CarvanaLoaders
