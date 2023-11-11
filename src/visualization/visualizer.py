@@ -32,7 +32,7 @@ class Visualizer:
       merged_image = add_mask(image, mask_image)
       merged_prediction = add_mask(image, preds)
 
-      _, axs = plt.subplots(2, 2, figsize=(20, 20))
+      _, axs = plt.subplots(2, 3, figsize=(20, 20))
 
       axs[0, 0].set_title("Target")
       axs[0, 0].imshow(mask_image)
@@ -40,11 +40,14 @@ class Visualizer:
       axs[0, 1].set_title("Prediction")
       axs[0, 1].imshow(preds_image)
 
-      axs[1, 0].set_title("Target")
-      axs[1, 0].imshow(merged_image.permute(1, 2, 0))
+      axs[1, 0].set_title("X-ray")
+      axs[1, 0].imshow(image.permute(1, 2, 0))
 
-      axs[1, 1].set_title("Prediction")
-      axs[1, 1].imshow(merged_prediction.permute(1, 2, 0))
+      axs[1, 1].set_title("Target")
+      axs[1, 1].imshow(merged_image.permute(1, 2, 0))
+
+      axs[1, 2].set_title("Prediction")
+      axs[1, 2].imshow(merged_prediction.permute(1, 2, 0))
 
       ctr += 1
       if ctr == count:
