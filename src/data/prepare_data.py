@@ -20,7 +20,7 @@ class DataPreparer():
             self.TEST_FILES = 2
             self.NUM_FILES = 5
         else:
-            self.TEST_FILES = 10
+            self.TEST_FILES = 50
             self.NUM_FILES = 1000
 
     def prepare_data(self):

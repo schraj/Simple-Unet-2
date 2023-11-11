@@ -10,7 +10,7 @@ if LOCAL:
   NUM_EPOCHS = 1
   NUM_WORKERS = 0
 else: 
-  NUM_EPOCHS = 10
+  NUM_EPOCHS = 50
   NUM_WORKERS = 2
 PIN_MEMORY = True
 DATASET = 'lung'
