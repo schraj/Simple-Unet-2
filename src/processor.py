@@ -24,7 +24,10 @@ class Processor:
         print(len(train_files), len(test_files), len(mask_files))
 
         trainer = Trainer()
-        trainer.process()
+        trainer.train()
+    def run_test(self):
+        trainer = Trainer()
+        trainer.test()
 
 
 

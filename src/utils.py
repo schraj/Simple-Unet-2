@@ -101,7 +101,6 @@ def dice_coefficient(pred, target, epsilon=1e-6):
 
     return dice
 
-
 def save_predictions_as_imgs(
     loader, model, folder="saved_images/", device="cuda"
 ):

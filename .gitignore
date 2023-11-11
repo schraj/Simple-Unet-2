@@ -2,6 +2,7 @@
 /lung_images
 /segmentation
 /saved_images
+/saved_model
 
 *.pyc
 
