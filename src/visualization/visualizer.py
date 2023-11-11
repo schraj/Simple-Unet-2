@@ -39,6 +39,7 @@ class Visualizer:
       if ctr == count:
         break
 
+  @staticmethod
   def show_sample_montgomery_image(self):  
     base_file = get_file_name(c.SEGMENTATION_IMAGE_DIR, 'M')
     image_file = os.path.join(c.SEGMENTATION_IMAGE_DIR, base_file)
@@ -81,6 +82,7 @@ class Visualizer:
     axs[1, 2].set_title("Merged")
     axs[1, 2].imshow(merged_image.permute(1, 2, 0))
 
+  @staticmethod
   def show_sample_shenszhen_image(self):
     base_file = get_file_name(c.SEGMENTATION_IMAGE_DIR, 'C')
 
