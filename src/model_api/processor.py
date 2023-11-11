@@ -2,7 +2,6 @@
 
 import os
 import torch
-import numpy as np
 from glob import glob
 import src.lung.constants as c
 from src.lung.prepare_data import DataPreparer
