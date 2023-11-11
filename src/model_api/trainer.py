@@ -48,7 +48,7 @@ class Trainer:
         lung_image_loader = LungImageLoader()
         test_loader = lung_image_loader.test_loader
 
-        _, preds_array =check_accuracy(test_loader, self.model, device=h.DEVICE)
+        preds_array = check_accuracy(test_loader, self.model, device=h.DEVICE)
 
         if (include_visualization):
             visualizer = Visualizer(lung_image_loader, self.model)
