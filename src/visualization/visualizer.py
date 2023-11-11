@@ -33,7 +33,7 @@ class Visualizer:
       axs[0, 0].imshow(merged_image.permute(1, 2, 0))
 
       axs[0, 1].set_title("Prediction")
-      axs[0, 1].imshow(merged_prediction)
+      axs[0, 1].imshow(merged_prediction.permute(1, 2, 0))
 
       ctr += 1
       if ctr == count:
