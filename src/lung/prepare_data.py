@@ -47,8 +47,8 @@ class DataPreparer():
       if h.LOCAL:
           montgomery_left_mask_dir = montgomery_left_mask_dir[:self.NUM_FILES]
 
+      print('Input Mont Files: ', len(montgomery_left_mask_dir))
       for left_image_file in montgomery_left_mask_dir:
-          print('first')
           base_file = os.path.basename(left_image_file)
           image_file = os.path.join(c.MONTGOMERY_IMAGE_DIR, base_file)
           right_image_file = os.path.join(c.MONTGOMERY_RIGHT_MASK_DIR, base_file)
@@ -66,7 +66,6 @@ class DataPreparer():
           image = format_image_tensor(image)
           mask = format_image_tensor(mask)
         
-          print('got here')
           if (left_image_file in montgomery_train):
               save_image(image,os.path.join(c.SEGMENTATION_IMAGE_DIR, base_file))
               save_image(mask, os.path.join(c.SEGMENTATION_MASK_DIR, base_file))
@@ -83,6 +82,7 @@ class DataPreparer():
       if h.LOCAL:
           shenzhen_mask_dir = shenzhen_mask_dir[:self.NUM_FILES]
 
+      print('Input Shen Files: ', len(shenzhen_mask_dir))
       for mask_file in shenzhen_mask_dir:
           base_file = os.path.basename(mask_file).replace("_mask", "")
           image_file = os.path.join(c.SHENZHEN_IMAGE_DIR, base_file)
