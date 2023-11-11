@@ -31,7 +31,7 @@ class Visualizer:
       _, axs = plt.subplots(2, 2, figsize=(20, 20))
 
       axs[0, 0].set_title("Target")
-      axs[0, 0].imshow(mask_image.permute(1, 2, 0))
+      axs[0, 0].imshow(mask_image)
 
       axs[0, 1].set_title("Prediction")
       axs[0, 1].imshow(preds_image.permute(1, 2, 0))

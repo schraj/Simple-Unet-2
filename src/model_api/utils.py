@@ -82,6 +82,7 @@ def check_accuracy(loader, model, device="cuda"):
     )
     # print(f"Manual Dice score: {average_manual_dice_score}")
     print(f"TM Dice score: {average_tm_dice_score}")
+    print('preds_array:', preds_array)
     model.train()
     return average_tm_dice_score, preds_array
 
