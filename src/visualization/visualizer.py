@@ -38,7 +38,7 @@ class Visualizer:
       axs[0, 0].imshow(mask_image)
 
       axs[0, 1].set_title("Prediction")
-      axs[0, 1].imshow(preds_image.permute(1, 2, 0))
+      axs[0, 1].imshow(preds_image)
 
       axs[1, 0].set_title("Target")
       axs[1, 0].imshow(merged_image.permute(1, 2, 0))
