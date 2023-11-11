@@ -8,8 +8,9 @@ import torch.optim as optim
 from src.model_api.utils import save_predictions_as_imgs, save_checkpoint, load_checkpoint, check_accuracy
 from src.model.unet import UNET
 import src.config as h
-from src.lung.loaders import LungImageLoaders
+from src.lung.lung_image_loader import LungImageLoader
 from src.model_api.lifecycle import ModelLifecycle
+from src.visualization.visualizer import Visualizer
 
 class Trainer:
     def __init__(self):
@@ -42,15 +43,16 @@ class Trainer:
             # update tqdm loop
             loop.set_postfix(loss=loss.item())
 
-    def test(self):
+    def test(self, include_visualization):
         self.modelLifecyle.load_model()
-        dataset = LungImageLoaders()
-        test_loader = dataset.test_loader
+        lung_image_loader = LungImageLoader()
+        test_loader = lung_image_loader.test_loader
 
-        check_accuracy(test_loader, self.model, device=h.DEVICE)
-        save_predictions_as_imgs(
-            test_loader, self.model, folder="saved_images", device=h.DEVICE
-        )
+        _, preds_array =check_accuracy(test_loader, self.model, device=h.DEVICE)
+
+        if (include_visualization):
+            visualizer = Visualizer(lung_image_loader, self.model)
+            visualizer.show_test_results(5, preds_array)
 
     def train(self):
         if (h.DATASET == 'carvana'):
@@ -59,8 +61,8 @@ class Trainer:
             train_loader = dataset.train_loader
             val_loader = dataset.val_loader
         else:
-            from src.lung.loaders import LungImageLoaders
-            dataset = LungImageLoaders()
+            from src.lung.lung_image_loader import LungImageLoader
+            dataset = LungImageLoader()
             train_loader = dataset.train_loader
             val_loader = dataset.val_loader
  

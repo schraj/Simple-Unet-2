@@ -54,6 +54,7 @@ def check_accuracy(loader, model, device="cuda"):
     loader_len = len(loader)
     model.eval()
     dice=Dice().to(device)
+    preds_array = []
     with torch.no_grad():
         for x, y in loader:
             x = x.to(device)
@@ -62,6 +63,7 @@ def check_accuracy(loader, model, device="cuda"):
             preds = torch.sigmoid(model(x))
 
             preds = (preds > 0.5).float()
+            preds_array.append(preds)
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
             indiv_dice_score = dice_coefficient(preds, y)
@@ -81,7 +83,7 @@ def check_accuracy(loader, model, device="cuda"):
     # print(f"Manual Dice score: {average_manual_dice_score}")
     print(f"TM Dice score: {average_tm_dice_score}")
     model.train()
-    return average_tm_dice_score
+    return average_tm_dice_score, preds_array
 
 # This is not correct, giving values above 1
 def dice_coefficient(pred, target, epsilon=1e-6):

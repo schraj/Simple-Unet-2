@@ -25,9 +25,7 @@ class Processor:
 
         trainer = Trainer()
         trainer.train()
-    def run_test(self):
+    def run_test(self, include_visualization):
         trainer = Trainer()
-        trainer.test()
-
-
+        trainer.test(include_visualization)
 
