@@ -41,7 +41,6 @@ class DataPreparer():
 
     def prepare_montgomery_data(self):
       montgomery_left_mask_dir = glob(os.path.join(c.MONTGOMERY_LEFT_MASK_DIR, '*.png'))
-      print(montgomery_left_mask_dir)
       montgomery_test = montgomery_left_mask_dir[:self.TEST_FILES]
       montgomery_train= montgomery_left_mask_dir[self.TEST_FILES:]
     
@@ -49,6 +48,7 @@ class DataPreparer():
           montgomery_left_mask_dir = montgomery_left_mask_dir[:self.NUM_FILES]
 
       for left_image_file in montgomery_left_mask_dir:
+          print('first')
           base_file = os.path.basename(left_image_file)
           image_file = os.path.join(c.MONTGOMERY_IMAGE_DIR, base_file)
           right_image_file = os.path.join(c.MONTGOMERY_RIGHT_MASK_DIR, base_file)
@@ -65,7 +65,8 @@ class DataPreparer():
 
           image = format_image_tensor(image)
           mask = format_image_tensor(mask)
-
+        
+          print('got here')
           if (left_image_file in montgomery_train):
               save_image(image,os.path.join(c.SEGMENTATION_IMAGE_DIR, base_file))
               save_image(mask, os.path.join(c.SEGMENTATION_MASK_DIR, base_file))
