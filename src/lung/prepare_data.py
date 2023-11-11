@@ -41,6 +41,7 @@ class DataPreparer():
 
     def prepare_montgomery_data(self):
       montgomery_left_mask_dir = glob(os.path.join(c.MONTGOMERY_LEFT_MASK_DIR, '*.png'))
+      print(montgomery_left_mask_dir)
       montgomery_test = montgomery_left_mask_dir[:self.TEST_FILES]
       montgomery_train= montgomery_left_mask_dir[self.TEST_FILES:]
     
