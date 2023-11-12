@@ -11,12 +11,21 @@ import src.config as h
 from src.lung.lung_image_loader import LungImageLoader
 from src.model_api.lifecycle import ModelLifecycle
 from src.visualization.visualizer import Visualizer
+from torchmetrics.classification import Dice
+
 
 class Trainer:
     def __init__(self):
         self.model = UNET(in_channels=3, out_channels=1).to(h.DEVICE) 
         self.modelLifecyle = ModelLifecycle(self.model)
 
+    def combined_loss(self, loss_fn, dice, predictions, targets):
+        loss_fn = nn.BCEWithLogitsLoss()
+        loss = loss_fn(predictions, targets)
+        tm_dice = 1 - dice(predictions, targets)
+            
+        return loss + (1 - tm_dice) * 10
+        
     def train_fn(self, loader, optimizer, loss_fn, scaler):
         if h.NOTEBOOK:
             from tqdm.notebook import tqdm, trange
@@ -25,6 +34,7 @@ class Trainer:
 
         loop = tqdm(loader)
 
+        dice=Dice().to(h.DEVICE)
         for batch_idx, (data, targets) in enumerate(loop):
             data = data.to(device=h.DEVICE)
             targets = targets.float().unsqueeze(1).to(device=h.DEVICE)
@@ -32,7 +42,7 @@ class Trainer:
             # forward
             with torch.cuda.amp.autocast():
                 predictions = self.model(data)
-                loss = loss_fn(predictions, targets)
+                loss = self.combined_loss(loss_fn, dice, predictions, targets)
 
             # backward
             optimizer.zero_grad()
