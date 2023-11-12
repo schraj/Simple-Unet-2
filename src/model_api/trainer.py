@@ -71,16 +71,21 @@ class Trainer:
         loss_fn = nn.BCEWithLogitsLoss()
         optimizer = optim.Adam(self.model.parameters(), lr=h.LEARNING_RATE)
             
-        check_accuracy(val_loader, self.model, device=h.DEVICE)
+        current_score, _ = check_accuracy(val_loader, self.model, device=h.DEVICE)
         scaler = torch.cuda.amp.GradScaler()
         score_array = []
+        best_score = 0 
         for epoch in range(h.NUM_EPOCHS):
             print("Epoch ",epoch)
             self.train_fn(train_loader, optimizer, loss_fn, scaler)
 
-            score, preds_array = check_accuracy(val_loader, self.model, device=h.DEVICE)
-            score_array.append(score)        
-            if epoch % 10 == 0:
+            current_score, preds_array = check_accuracy(val_loader, self.model, device=h.DEVICE)
+            score_array.append(current_score)        
+            if epoch > 15 and current_score > best_score:
+                best_score = current_score
+                print("Saving model...")
+                print("Dice score:", best_score)
+                print("Epoch:", epoch)
                 self.modelLifecyle.save_model()
                 print("Model saved")
 
