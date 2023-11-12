@@ -68,8 +68,10 @@ TODO: get list of libraries
  - Adding augmentations had a positive effect on the final performance as measured by the Dice Score
   - Used the `albumentations` library which was much clearer than doing by hand
  - Training model longer(50 epochs) 
+ - combined loss function
+  - Higher weight for Dice(*10) gave poorer Dice scores - ~72
+
 1. Next steps
- -  Use a loss function that is a weighted combination of these two.  The weight would be determined empirically.
 
 # 5. Test
 1. Test dataset is 50 images that are put aside for final testing of the model

@@ -19,12 +19,14 @@ class Trainer:
         self.model = UNET(in_channels=3, out_channels=1).to(h.DEVICE) 
         self.modelLifecyle = ModelLifecycle(self.model)
 
-    def combined_loss(self, loss_fn, dice, predictions, targets):
-        loss_fn = nn.BCEWithLogitsLoss()
-        loss = loss_fn(predictions, targets)
-        tm_dice = 1 - dice(predictions, targets)
-            
-        return loss + (1 - tm_dice) * 10
+    # def combined_loss(self, loss_fn, dice, predictions, targets):
+    #     loss_fn = nn.BCEWithLogitsLoss()
+    #     bce_loss = loss_fn(predictions, targets)
+    #     tm_dice = 1 - dice(predictions, targets)
+    #     scale_factor = abs(bce_loss)/tm_dice
+    #     scaled_dice = tm_dice * scale_factor
+    #     loss = scaled_dice + bce_loss
+    #     return loss
         
     def train_fn(self, loader, optimizer, loss_fn, scaler):
         if h.NOTEBOOK:
@@ -42,7 +44,8 @@ class Trainer:
             # forward
             with torch.cuda.amp.autocast():
                 predictions = self.model(data)
-                loss = self.combined_loss(loss_fn, dice, predictions, targets)
+                # loss = loss_fn(predictions, targets)
+                loss = 1 - dice(predictions, targets)
 
             # backward
             optimizer.zero_grad()
