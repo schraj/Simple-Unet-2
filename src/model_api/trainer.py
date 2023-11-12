@@ -45,7 +45,10 @@ class Trainer:
             with torch.cuda.amp.autocast():
                 predictions = self.model(data)
                 # loss = loss_fn(predictions, targets)
-                loss = 1 - dice(predictions, targets)
+                preds = torch.sigmoid(predictions)
+                preds = (preds > 0.5).float()
+                target = (targets == 1)
+                loss = 1 - dice(preds, target)
 
             # backward
             optimizer.zero_grad()
