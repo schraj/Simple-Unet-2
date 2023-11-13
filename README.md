@@ -1,7 +1,9 @@
-# 1. Overview
-This repository is an exercise in image segmentation using lung images as the dataset. 
+# Medical Image Segmentation
 
-Medical Image Segmentation is the process of automatic detection of boundaries within images. In this exercise, I train a neural network with [U-Net](https://arxiv.org/abs/1505.04597) architecture.
+## 1. Overview
+This repository is an exercise in medical image segmentation using lung images as the dataset. 
+
+Medical Image Segmentation is the process of automatic detection of boundaries within medical images. In this exercise, I train a neural network with [U-Net](https://arxiv.org/abs/1505.04597) architecture.
 
 Uses: 
 - Identifying Regions of Interest: Medical image segmentation is used to distinguish and isolate specific regions or structures within medical images, such as organs, tissues, or tumors.
@@ -25,7 +27,7 @@ U-net model was adapted from this these two projects
 
 - (blog post)[https://towardsdatascience.com/creating-and-training-a-u-net-model-with-pytorch-for-2d-3d-semantic-segmentation-model-building-6ab09d6a0862]
 
-# 1. Installation
+## 1. Installation
 
 1. Set up a new environment with an environment manager (recommended):
    1. [conda](https://docs.conda.io/en/latest/miniconda.html):
@@ -47,53 +49,80 @@ TODO: get list of libraries
 3. Start a jupyter server or run in VS code:
 `jupyter-notebook` OR `jupyter-lab`
 
+## 2. Prepare Kaggle Environment to Sing :)
+1. We don't want to write a bunch of python code in notebook, much prefer python modules.  To make this work well, we need to do a number of things:
+- Clone your github repo and it will then be available in your `/kaggle/working` directory
+```
+!git clone https://github.com/schraj/simple-unet-2.git
+```
+- add the following code so that every time you update your python code in the repo and pull from it, your local kernel will update:
+```
+%load_ext autoreload
+%autoreload 2
+```
+- Pull latest from your repo every time you have made a change:
+```
+# Change directory to the local repository's directory
+%cd /kaggle/working/simple-unet-2
 
-# 3. Data Preparation
+# Pull the latest changes
+!git pull origin main
+```
+- Add your `src` directory from your cloned repo to your local notebook kernel's path:
+```
+import sys
+sys.path.append('/kaggle/working/simple-unet-2/src')
+```
+- To get your notebook to run correctly when you run it offline with "Save and Run All" with a large imported dataset(like the images datasets used in this projects), you need to wait for it to load before access it:
+
+```
+import time
+time.sleep(200)
+```
+
+- Finally, things will run very differently on your local machine versus on the Kaggle kernel, with GPUs etc.  Therefore, you'll want to be able to change config settings on the fly in your notebook.  You can have a config file in your python project and then overwrite this values in your notebook with the settings you want for running in Kaggle:
+
+```
+import src.config as h
+h.LOCAL = False
+h.NUM_EPOCHS = 50
+h.BATCH_SIZE = 16
+h.LEARNING_RATE = 1e-4
+```
+
+Here is a (link)[https://www.kaggle.com/jeremyschrader1/kaggle-with-github-repo] to an example of this setup
+
+## 3. Data Preparation
 
 1. Combine left and right lung segmentation masks of Montgomery chest x-rays
 1. Resize images to 512x512 pixels
 1. Split images into training and test datasets
 1. Write images to /segmentation 
 1. Training dataset will have an 80:20 training:validation split
-1. Test dataset is 50 images that are put aside for final testing of the model
+1. Test dataset can be either 50 or 100 images that are put aside for final testing of the model
 
-# 4. Training
-1. Trainer class implements the training loop and the testing loops
+## 4. Data Pipeline
+1. Define a custom dataset
+- Holds the list of file names and how to load one
+2. Define data loaders
+- Defines the transformation pipeline that an image will undergo when asked for by the training loop.
+
+## 5. Training
+1. Trainer class implements the training loop and the testing phase
 1. Loss Function: 
  - PyTorch's (BCEWithLogitsLoss)[https://pytorch.org/docs/stable/generated/torch.nn.BCEWithLogitsLoss.html]
 
  - Torchmetrics (dice coefficient)[https://towardsdatascience.com/biomedical-image-segmentation-u-net-a787741837fa#:~:text=Dice%20coefficient,-A%20common%20metric&text=The%20calculation%20is%202%20*%20the,denotes%20perfect%20and%20complete%20overlap]
 
-# 5. Test
+## 5. Test Phase
 1. Test dataset is 50-100 images that are put aside for final testing of the model
-2. Retrieve saved model, send these images through the pretrained model and compare the result with the target
+1. Retrieve saved model, send these images through the pretrained model and compare the result with the target
+1. Determine the average Accuracy, Dice Score, and BCE Loss.
 
-# 6. Deployment
+## 6. Deployment
 1. Save model at the end of training on kaggle
 1. Download model
 1. Create a new dataset in kaggle and upload model to it
 
-## Kaggle
-
-1. Link github repo to kaggle and it appears in `/kaggle/working`.
-  - This was key if you don't want to only use a notebook, but want to write python modules
-  - See notebook for keys to making this work
-1. Add it to the path and then can use it as a custom library from your notebook
-
 # Finally. Learning
 1. The data/image manipulation had a higher learning curve than expected.  Mixing image libraries led to unexpected formatting.
-1. Interactions between Kaggle and Github
- - Key is that you can clone a github repo into your kaggle working directory and then add the path to your python modules into the notebook environment's path. 
-1. Interactions between jupyter notebook and code modules
- - Auto reload of changes within your modules can be enabled with this
-
-[Reference](https://bobbyhadz.com/blog/jupyter-notebook-reload-module#:~:text=Use%20the%20%25load_ext%20autoreload%20magic,before%20executing%20the%20Python%20code.)
-```
-%load_ext autoreload
-%autoreload 2
-
-```
-1. With this interaction between kaggle and github setup, it is good to instrument your code to easily toggle between your local dev environment and the kaggle environment.  The process is:
- - Do development locally
- - upload to github
- - pull your updates into your kaggle notebook
