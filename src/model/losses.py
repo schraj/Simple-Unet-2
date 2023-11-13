@@ -1,6 +1,8 @@
 import torch
 from typing import Optional, Sequence, Union
 import torch.nn as nn
+from torchmetrics.classification import Dice
+import src.config as h
 
 class CombinedLoss(torch.nn.Module):
     """Defines a loss function as a weighted sum of combinable loss criteria.
@@ -15,8 +17,8 @@ class CombinedLoss(torch.nn.Module):
     def __init__(
         self,
         criteria,
-        weight: Optional[Sequence[float]] = None,
-        device: Optional[torch.device] = None,
+        weight,
+        device,
     ):
         super().__init__()
         self.criteria = torch.nn.ModuleList(criteria)
@@ -34,28 +36,13 @@ class CombinedLoss(torch.nn.Module):
             loss += weight * crit(*args)
         return loss
 
-def dice_loss(
-    probs: torch.Tensor,
-    target: torch.Tensor,
-    dice,
-    weight: float = 1.0,
-    eps: float = 0.0001,
-    smooth: float = 0.0,
-):
-    return dice(probs, target, weight, eps, smooth)
-
 class BCELossModule(torch.nn.Module):
-    def __init__(
-        self,
-        weight: Optional[torch.Tensor] = None,
-    ):
+    def __init__(self, weight=None):
         super().__init__()
-        if weight is None:
-            weight = torch.tensor(1.0)
-        self.register_buffer("weight", weight)
+        self.bce_with_logits_loss = nn.BCEWithLogitsLoss(weight=weight)
 
     def forward(self, output: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-        return nn.BCEWithLogitsLoss(weight=self.weight)(output, target) 
+        return self.bce_with_logits_loss(output, target)
 
 class DiceLoss(torch.nn.Module):
     def __init__(
@@ -69,7 +56,7 @@ class DiceLoss(torch.nn.Module):
             self.softmax = torch.nn.Softmax(dim=1)
         else:
             self.softmax = lambda x: x  # Identity (no softmax)
-        self.dice = dice_loss
+        self.dice = Dice().to(h.DEVICE)
         if weight is None:
             weight = torch.tensor(1.0)
         self.register_buffer("weight", weight)
@@ -77,6 +64,5 @@ class DiceLoss(torch.nn.Module):
 
     def forward(self, output: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         probs = self.softmax(output)
-        return self.dice(
-            probs=probs, target=target, weight=self.weight, smooth=self.smooth
-        )
+        target = (target== 1)
+        return self.dice(probs, target)

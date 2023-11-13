@@ -11,8 +11,7 @@ import src.config as h
 from src.lung.lung_image_loader import LungImageLoader
 from src.model_api.lifecycle import ModelLifecycle
 from src.visualization.visualizer import Visualizer
-from torchmetrics.classification import Dice
-from src.model.losses import DiceLoss, BCELossModule, CombinedLoss
+from src.model.losses import BCELossModule, DiceLoss, CombinedLoss
 
 class Trainer:
     def __init__(self):
@@ -27,7 +26,6 @@ class Trainer:
 
         loop = tqdm(loader)
 
-        dice=Dice().to(h.DEVICE)
         for batch_idx, (data, targets) in enumerate(loop):
             data = data.to(device=h.DEVICE)
             targets = targets.float().unsqueeze(1).to(device=h.DEVICE)
@@ -71,9 +69,12 @@ class Trainer:
             train_loader = dataset.train_loader
             val_loader = dataset.val_loader
 
-        # combinedLoss = CombinedLoss([DiceLoss], [1, 1], h.DEVICE)   
-        # loss_fn = combinedLoss
-        loss_fn = nn.BCEWithLogitsLoss()
+        bCELossModule = BCELossModule()
+        diceLoss = DiceLoss()
+        
+        combinedLoss = CombinedLoss([bCELossModule, diceLoss], [1, 1], h.DEVICE)   
+        loss_fn = combinedLoss
+        # loss_fn = nn.BCEWithLogitsLoss()
         regularOptimizer = optim.Adam(self.model.parameters(), lr=h.LEARNING_RATE)
         firstOptimizer = optim.Adam(self.model.parameters(), lr=1e-4)
         secondOptimizer = optim.Adam(self.model.parameters(), lr=1e-5)
