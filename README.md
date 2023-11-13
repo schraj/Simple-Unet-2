@@ -60,19 +60,9 @@ TODO: get list of libraries
 # 4. Training
 1. Trainer class implements the training loop and the testing loops
 1. Loss Function: 
- - I'm currently using PyTorch's (BCEWithLogitsLoss)[https://pytorch.org/docs/stable/generated/torch.nn.BCEWithLogitsLoss.html]
+ - PyTorch's (BCEWithLogitsLoss)[https://pytorch.org/docs/stable/generated/torch.nn.BCEWithLogitsLoss.html]
 
- - (dice coefficient)[https://towardsdatascience.com/biomedical-image-segmentation-u-net-a787741837fa#:~:text=Dice%20coefficient,-A%20common%20metric&text=The%20calculation%20is%202%20*%20the,denotes%20perfect%20and%20complete%20overlap]
-
-1. Tuning
- - Adding augmentations had a positive effect on the final performance as measured by the Dice Score
-  - Used the `albumentations` library which was much clearer than doing by hand
- - Training model longer(50 epochs)  
- - combined loss function
-  - High weight for Dice(*10) gave poorer Dice output scores to start and then once the BCE score started to outweigh the Dice score then learning proceeeded as if BCE only.
-
-1. Next steps
-  - Way to combine Dice and BCE scores so they scale together.
+ - Torchmetrics (dice coefficient)[https://towardsdatascience.com/biomedical-image-segmentation-u-net-a787741837fa#:~:text=Dice%20coefficient,-A%20common%20metric&text=The%20calculation%20is%202%20*%20the,denotes%20perfect%20and%20complete%20overlap]
 
 # 5. Test
 1. Test dataset is 50-100 images that are put aside for final testing of the model
