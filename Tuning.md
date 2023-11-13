@@ -34,3 +34,12 @@ Evaluation is a two step process:
 - Training/Test: 700/50
 - Albumentations: With
 - Optimizer: Adam
+- Loss Function: Combined Dice and BCE
+
+(v28)[https://www.kaggle.com/code/jeremyschrader1/unet-lung-segmentation?scriptVersionId=150464053]
+
+## Next Steps
+- Try different weights of the two loss functions within the combined loss
+- Add BCE to the evaluation step
+
+

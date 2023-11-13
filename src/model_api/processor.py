@@ -29,3 +29,8 @@ class Processor:
         trainer = Trainer()
         preds_array = trainer.test(include_visualization)
         return preds_array
+
+    def predict(self):
+        trainer = Trainer()
+        preds_array = trainer.predict()
+        return preds_array

@@ -3,7 +3,7 @@ import os
 import io
 import json
 from PIL import Image
-import tensorflow as tf  # or import torch
+import torch
 
 # Initialize S3 client
 s3_client = boto3.client('s3')
@@ -15,7 +15,7 @@ def load_model_from_s3(bucket_name, model_key):
     with io.BytesIO() as f:
         s3_client.download_fileobj(bucket_name, model_key, f)
         f.seek(0)
-        model = tf.keras.models.load_model(f)  # or use torch.load(f) for PyTorch
+        model = torch.load_model(f)
     return model
 
 def lambda_handler(event, context):

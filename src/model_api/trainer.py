@@ -1,5 +1,3 @@
-#model_training
-
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import torch
@@ -86,7 +84,7 @@ class Trainer:
         best_score = 0 
         for epoch in range(h.NUM_EPOCHS):
             print("Epoch ",epoch)
-            optimizer = firstOptimizer if epoch < 15 else secondOptimizer
+            # optimizer = firstOptimizer if epoch < 15 else secondOptimizer
             self.train_fn(train_loader, regularOptimizer, loss_fn, scaler)
 
             current_score, preds_array = check_accuracy(val_loader, self.model, device=h.DEVICE)

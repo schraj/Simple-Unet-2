@@ -68,10 +68,8 @@ def check_accuracy(loader, model, device="cuda"):
             indiv_dice_score = dice_coefficient(preds, y)
             running_manual_dice_score += indiv_dice_score
             target = (y == 1)
-            # print('manual:', indiv_dice_score)
             tm_dice = dice(preds, target)
             running_tm_dice_score += tm_dice
-            # print('tm:', tm_dice)
 
     average_manual_dice_score = (running_manual_dice_score / loader_len)
     average_tm_dice_score = (running_tm_dice_score / loader_len)
