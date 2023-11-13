@@ -1,0 +1,36 @@
+# Tuning
+
+## Evaluation
+
+Evaluation is a two step process:
+- First by Accuracy(`total pixels correct/total pixes`) and Dice scores.   
+- Then, it is by looking at the actual prediction masks and comparing them to both the target masks and the input image.
+
+## Tuning Parameters and Decisions
+- Because the dataset is small(720 images altogether), it seemed to have a positive effect to train/validate on more and test on fewer.  
+  - Train/Validate: 700
+  - Test: 50
+- Adding augmentations had a positive effect on the final performance as measured by the Dice Score.  However, the effect was not large.
+  - Used the `albumentations` library which was much clearer than doing by hand
+- Training model epochs
+  - Improvement hit a plateau around 25 epochs
+- Loss function
+- Learning rate
+  - Started and ended with an lr or 1e-4
+  - Decreasing the learning to 1e-5 helped to smooth the training loss curve.  However, the output masks were worse.  There were many pixels within the expected target area that weren't not correct.
+- Convolutional Layers
+  - Increasing the number of Conv layers to 5 also caused the output masks to be worse.  Again, there were many pixels within the expected target area that weren't not correct.
+- Optimizer
+  - Started and ended with Adam optimizer.  This was the most effective and fastest in training.
+  - Pytorch's SGD optimizer was not effective at all.  The image segmentation process never worked with it.  Dice scores(Train: .60, Test: .4) and the images were bad.
+- Batch Size
+  - Increasing the batch size from 1 to 16 both stabilized the training progression and allowed training to get to slightly higher Dice Scores(Val: 92, Test: 69.8)
+
+## Final Model
+- Epochs: 30
+- Batch Size: 16
+- Conv Layers: 4
+- LR: 1e-4
+- Training/Test: 700/50
+- Albumentations: With
+- Optimizer: Adam
