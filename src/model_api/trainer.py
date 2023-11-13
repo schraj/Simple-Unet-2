@@ -71,8 +71,9 @@ class Trainer:
             train_loader = dataset.train_loader
             val_loader = dataset.val_loader
 
-        combinedLoss = CombinedLoss([nn.BCEWithLogitsLoss, DiceLoss], [1, 1], h.DEVICE)   
-        loss_fn =  combinedLoss
+        # combinedLoss = CombinedLoss([nn.BCEWithLogitsLoss, DiceLoss], [1, 1], h.DEVICE)   
+        # loss_fn =   combinedLoss
+        loss_fn = nn.BCEWithLogitsLoss()
         firstOptimizer = optim.Adam(self.model.parameters(), lr=1e-4)
         secondOptimizer = optim.Adam(self.model.parameters(), lr=1e-5)
         # optimizer = torch.optim.SGD(self.model.parameters(), lr=1e-2)
