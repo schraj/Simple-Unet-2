@@ -12,7 +12,7 @@ from src.lung.lung_image_loader import LungImageLoader
 from src.model_api.lifecycle import ModelLifecycle
 from src.visualization.visualizer import Visualizer
 from torchmetrics.classification import Dice
-from src.model.losses import DiceLoss, CombinedLoss
+from src.model.losses import DiceLoss, BCELossModule, CombinedLoss
 
 class Trainer:
     def __init__(self):
@@ -71,9 +71,10 @@ class Trainer:
             train_loader = dataset.train_loader
             val_loader = dataset.val_loader
 
-        # combinedLoss = CombinedLoss([nn.BCEWithLogitsLoss, DiceLoss], [1, 1], h.DEVICE)   
-        # loss_fn =   combinedLoss
+        # combinedLoss = CombinedLoss([DiceLoss], [1, 1], h.DEVICE)   
+        # loss_fn = combinedLoss
         loss_fn = nn.BCEWithLogitsLoss()
+        regularOptimizer = optim.Adam(self.model.parameters(), lr=h.LEARNING_RATE)
         firstOptimizer = optim.Adam(self.model.parameters(), lr=1e-4)
         secondOptimizer = optim.Adam(self.model.parameters(), lr=1e-5)
         # optimizer = torch.optim.SGD(self.model.parameters(), lr=1e-2)
@@ -85,7 +86,7 @@ class Trainer:
         for epoch in range(h.NUM_EPOCHS):
             print("Epoch ",epoch)
             optimizer = firstOptimizer if epoch < 15 else secondOptimizer
-            self.train_fn(train_loader, optimizer, loss_fn, scaler)
+            self.train_fn(train_loader, regularOptimizer, loss_fn, scaler)
 
             current_score, preds_array = check_accuracy(val_loader, self.model, device=h.DEVICE)
             score_array.append(current_score)        
