@@ -84,7 +84,7 @@ class Trainer:
 
             current_score, preds_array = check_accuracy(val_loader, self.model, device=h.DEVICE)
             score_array.append(current_score)        
-            if epoch > 15 and current_score > best_score:
+            if epoch > 5 and current_score > best_score:
                 best_score = current_score
                 print("Saving model...")
                 print("Dice score:", best_score)

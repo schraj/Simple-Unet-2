@@ -67,14 +67,15 @@ TODO: get list of libraries
 1. Tuning
  - Adding augmentations had a positive effect on the final performance as measured by the Dice Score
   - Used the `albumentations` library which was much clearer than doing by hand
- - Training model longer(50 epochs) 
+ - Training model longer(50 epochs)  
  - combined loss function
   - High weight for Dice(*10) gave poorer Dice output scores to start and then once the BCE score started to outweigh the Dice score then learning proceeeded as if BCE only.
 
 1. Next steps
+  - Way to combine Dice and BCE scores so they scale together.
 
 # 5. Test
-1. Test dataset is 50 images that are put aside for final testing of the model
+1. Test dataset is 50-100 images that are put aside for final testing of the model
 2. Retrieve saved model, send these images through the pretrained model and compare the result with the target
 
 # 6. Deployment
