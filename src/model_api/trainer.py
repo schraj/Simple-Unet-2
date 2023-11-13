@@ -72,8 +72,9 @@ class Trainer:
             val_loader = dataset.val_loader
  
         loss_fn = nn.BCEWithLogitsLoss()
-        # optimizer = optim.Adam(self.model.parameters(), lr=h.LEARNING_RATE)
-        optimizer = torch.optim.SGD(self.model.parameters(), lr=h.LEARNING_RATE)
+        firstOptimizer = optim.Adam(self.model.parameters(), lr=1e-4)
+        secondOptimizer = optim.Adam(self.model.parameters(), lr=1e-5)
+        # optimizer = torch.optim.SGD(self.model.parameters(), lr=h.LEARNING_RATE)
     
         current_score, _ = check_accuracy(val_loader, self.model, device=h.DEVICE)
         scaler = torch.cuda.amp.GradScaler()
@@ -81,7 +82,8 @@ class Trainer:
         best_score = 0 
         for epoch in range(h.NUM_EPOCHS):
             print("Epoch ",epoch)
-            self.train_fn(train_loader, optimizer, loss_fn, scaler)
+            # optimizer = firstOptimizer if epoch < 15 else secondOptimizer
+            self.train_fn(train_loader, secondOptimizer, loss_fn, scaler)
 
             current_score, preds_array = check_accuracy(val_loader, self.model, device=h.DEVICE)
             score_array.append(current_score)        
