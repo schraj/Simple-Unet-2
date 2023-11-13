@@ -69,7 +69,7 @@ TODO: get list of libraries
   - Used the `albumentations` library which was much clearer than doing by hand
  - Training model longer(50 epochs) 
  - combined loss function
-  - Higher weight for Dice(*10) gave poorer Dice scores - ~72
+  - High weight for Dice(*10) gave poorer Dice output scores to start and then once the BCE score started to outweigh the Dice score then learning proceeeded as if BCE only.
 
 1. Next steps
 
