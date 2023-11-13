@@ -12,7 +12,7 @@ from src.lung.lung_image_loader import LungImageLoader
 from src.model_api.lifecycle import ModelLifecycle
 from src.visualization.visualizer import Visualizer
 from torchmetrics.classification import Dice
-
+from src.model.losses import DiceLoss, CombinedLoss
 
 class Trainer:
     def __init__(self):
@@ -72,9 +72,9 @@ class Trainer:
             val_loader = dataset.val_loader
  
         loss_fn = nn.BCEWithLogitsLoss()
-        # firstOptimizer = optim.Adam(self.model.parameters(), lr=1e-4)
-        # secondOptimizer = optim.Adam(self.model.parameters(), lr=1e-5)
-        secondOptimizer = torch.optim.SGD(self.model.parameters(), lr=1e-4)
+        firstOptimizer = optim.Adam(self.model.parameters(), lr=1e-4)
+        secondOptimizer = optim.Adam(self.model.parameters(), lr=1e-5)
+        optimizer = torch.optim.SGD(self.model.parameters(), lr=1e-2)
     
         current_score, _ = check_accuracy(val_loader, self.model, device=h.DEVICE)
         scaler = torch.cuda.amp.GradScaler()
@@ -83,7 +83,7 @@ class Trainer:
         for epoch in range(h.NUM_EPOCHS):
             print("Epoch ",epoch)
             # optimizer = firstOptimizer if epoch < 15 else secondOptimizer
-            self.train_fn(train_loader, secondOptimizer, loss_fn, scaler)
+            self.train_fn(train_loader, optimizer, loss_fn, scaler)
 
             current_score, preds_array = check_accuracy(val_loader, self.model, device=h.DEVICE)
             score_array.append(current_score)        
