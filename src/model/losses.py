@@ -65,4 +65,4 @@ class DiceLoss(torch.nn.Module):
     def forward(self, output: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         probs = self.softmax(output)
         target = (target== 1)
-        return self.dice(probs, target)
+        return 1 -self.dice(probs, target)
