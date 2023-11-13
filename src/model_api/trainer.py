@@ -72,9 +72,9 @@ class Trainer:
             val_loader = dataset.val_loader
  
         loss_fn = nn.BCEWithLogitsLoss()
-        firstOptimizer = optim.Adam(self.model.parameters(), lr=1e-4)
-        secondOptimizer = optim.Adam(self.model.parameters(), lr=1e-5)
-        # optimizer = torch.optim.SGD(self.model.parameters(), lr=h.LEARNING_RATE)
+        # firstOptimizer = optim.Adam(self.model.parameters(), lr=1e-4)
+        # secondOptimizer = optim.Adam(self.model.parameters(), lr=1e-5)
+        secondOptimizer = torch.optim.SGD(self.model.parameters(), lr=1e-4)
     
         current_score, _ = check_accuracy(val_loader, self.model, device=h.DEVICE)
         scaler = torch.cuda.amp.GradScaler()
