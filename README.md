@@ -3,7 +3,7 @@
 ## 1. Overview
 This repository is an exercise in medical image segmentation using lung images as the dataset. 
 
-Medical Image Segmentation is the process of automatic detection of boundaries within medical images. In this exercise, I train a neural network with [U-Net](https://arxiv.org/abs/1505.04597) architecture.
+Medical Image Segmentation is the process of automatic detection of areas within medical images. In this exercise, a neural network with [U-Net](https://arxiv.org/abs/1505.04597) architecture is trained to identify the lung within an X-ray of the torso.
 
 Uses: 
 - Identifying Regions of Interest: Medical image segmentation is used to distinguish and isolate specific regions or structures within medical images, such as organs, tissues, or tumors.
