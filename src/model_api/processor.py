@@ -36,12 +36,5 @@ class Processor:
 
     def predict(self, image_path):        
         image = LungImageLoader.load_one_image(image_path)
-        # lung_image_loader = LungImageLoader()
-        # test_loader = lung_image_loader.test_loader
-        # for x, y in test_loader:
-        #     image = x.to(h.DEVICE)
-        #     break
-
         inferencer = Inferencer()
-        # image = image.squeeze(0)
         return inferencer.predict(image)
