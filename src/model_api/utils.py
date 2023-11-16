@@ -59,8 +59,8 @@ def check_accuracy(loader, model, device="cuda"):
         for x, y in loader:
             x = x.to(device)
             y = y.to(device).unsqueeze(1)
-
-            preds = torch.sigmoid(model(x))
+            without_sigmoid = model(x)
+            preds = torch.sigmoid(without_sigmoid)
             preds = (preds > 0.5).float()
             preds_array.append(preds)
             num_correct += (preds == y).sum()

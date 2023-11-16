@@ -8,7 +8,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 1
 DATASET = 'lung'
 if LOCAL:
-  NUM_EPOCHS = 1
+  NUM_EPOCHS = 3
   NUM_WORKERS = 0
   PIN_MEMORY = True
 else: 

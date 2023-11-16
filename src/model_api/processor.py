@@ -8,7 +8,7 @@ from src.lung.prepare_data import DataPreparer
 from src.model_api.trainer import Trainer
 from src.model_api.inference import Inferencer
 from src.lung.lung_image_loader import LungImageLoader
-import torchvision
+import src.config as h
 
 class Processor:
     def __init__(self):
@@ -34,7 +34,14 @@ class Processor:
         preds_array = trainer.test(include_visualization)
         return preds_array
 
-    def predict(self, image_path):
+    def predict(self, image_path):        
         image = LungImageLoader.load_one_image(image_path)
+        # lung_image_loader = LungImageLoader()
+        # test_loader = lung_image_loader.test_loader
+        # for x, y in test_loader:
+        #     image = x.to(h.DEVICE)
+        #     break
+
         inferencer = Inferencer()
+        # image = image.squeeze(0)
         return inferencer.predict(image)

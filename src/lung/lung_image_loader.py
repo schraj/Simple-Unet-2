@@ -110,5 +110,6 @@ class LungImageLoader:
             ),
             ToTensorV2(),
         ])      
-        transformed = transforms(image=image)['image']
+        augmentations = transforms(image=image)
+        transformed = augmentations['image']
         return transformed
