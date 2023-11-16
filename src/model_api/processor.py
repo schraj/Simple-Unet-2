@@ -6,6 +6,9 @@ from glob import glob
 import src.lung.constants as c
 from src.lung.prepare_data import DataPreparer
 from src.model_api.trainer import Trainer
+from src.model_api.inference import Inferencer
+from src.lung.lung_image_loader import LungImageLoader
+import torchvision
 
 class Processor:
     def __init__(self):
@@ -25,12 +28,13 @@ class Processor:
         trainer = Trainer()
         score_array = trainer.train()
         return score_array
+    
     def run_test(self, include_visualization):
         trainer = Trainer()
         preds_array = trainer.test(include_visualization)
         return preds_array
 
-    def predict(self):
-        trainer = Trainer()
-        preds_array = trainer.predict()
-        return preds_array
+    def predict(self, image_path):
+        image = LungImageLoader.load_one_image(image_path)
+        inferencer = Inferencer()
+        return inferencer.predict(image)

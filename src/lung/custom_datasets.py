@@ -19,7 +19,6 @@ class SegmentationDataSet(data.Dataset):
         input_ID = self.inputs[index]
         target_ID = self.targets[index]
 
-        # x, y = imread(str(input_ID)), imread(str(target_ID), as_gray=True)
         image = np.array(Image.open(str(input_ID)).convert("RGB"))
         mask = np.array(Image.open(str(target_ID)).convert("L"), dtype=np.float32)
         mask[mask == 255.0] = 1.0

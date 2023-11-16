@@ -1,5 +1,6 @@
 import torch
 from torchvision.utils import draw_segmentation_masks
+import torchvision
 
 def add_mask(image, mask_image):
     mask_bool = (mask_image!=0)

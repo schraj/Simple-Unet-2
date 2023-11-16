@@ -124,5 +124,3 @@ Here is a (link)[https://www.kaggle.com/jeremyschrader1/kaggle-with-github-repo]
 1. Download model
 1. Create a new dataset in kaggle and upload model to it
 
-# Finally. Learning
-1. The data/image manipulation had a higher learning curve than expected.  Mixing image libraries led to unexpected formatting.

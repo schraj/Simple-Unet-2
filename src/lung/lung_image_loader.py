@@ -6,9 +6,14 @@ import src.config as h
 from src.lung.data_utils import get_file_list
 from src.lung.custom_datasets import SegmentationDataSet
 import src.lung.constants as c
+import numpy as np
+from skimage.io import imread
+from PIL import Image
 
 train_size = 0.8
 random_seed = 42
+IMAGE_HEIGHT = 512
+IMAGE_WIDTH = 512
 
 class LungImageLoader:
     train_loader: None
@@ -17,8 +22,6 @@ class LungImageLoader:
     test_inputs: None
     test_targets: None
     def __init__(self):
-      IMAGE_HEIGHT = 512  # 1280 originally
-      IMAGE_WIDTH = 512  # 1918 originally
 
       self.train_transforms = A.Compose(
         [
@@ -93,3 +96,19 @@ class LungImageLoader:
           h.NUM_WORKERS,
           h.PIN_MEMORY,
       )
+
+    @staticmethod
+    def load_one_image(image_path):
+        image = np.array(Image.open(str(image_path)).convert("RGB"))
+        transforms = A.Compose(
+        [
+            A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+            A.Normalize(
+                mean=[0.0, 0.0, 0.0],
+                std=[1.0, 1.0, 1.0],
+                max_pixel_value=255.0,
+            ),
+            ToTensorV2(),
+        ])      
+        transformed = transforms(image=image)['image']
+        return transformed
